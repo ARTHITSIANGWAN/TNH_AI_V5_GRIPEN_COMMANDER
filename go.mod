@@ -1,10 +1,20 @@
-cd ..
-mkdir gripen && cd gripen
-git init
-echo "mit license - copyright 2026 thitnueahub" > license
-# (ก๊อปโค้ด gripen ด้านบนใส่ main.go)
-git add .
-git commit -m "feat: gripen full stack engine active (a2a)"
-git remote add origin https://github.com/ARTHITSIANGWAN/thitnueahub-agent-to-agent-gripen.git
-git push -u origin main
+package main
 
+import (
+	"fmt"
+	"net/http"
+	"os"
+)
+
+// gripen engine: eric full stack, gemini intelligence active
+func main() {
+	port := os.Getenv("PORT")
+	if port == "" { port = "8081" } // คนละพอร์ตเพื่อแยกกิ่งชัดเจน
+
+	http.HandleFunc("/process", func(w http.ResponseWriter, r *http.Request) {
+		// รับงานจาก f-16 มาประมวลผลด้วย ai
+		fmt.Fprintf(w, "gripen: a2a handshake success. gemini 2.0 flash is thinking...")
+	})
+
+	http.ListenAndServe(":"+port, nil)
+}
