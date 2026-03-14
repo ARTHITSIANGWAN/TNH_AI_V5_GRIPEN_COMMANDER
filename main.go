@@ -1,3 +1,4 @@
+// 🎁 โค้ดmain.go ชุดอัปเกรดสมอง Gemini AI (เพื่อเวทีโลก)
 package main
 
 import (
@@ -17,12 +18,12 @@ import (
 	"time"
 
 	"cloud.google.com/go/firestore"
-	"github.com/google/generative-ai-go/genai" // 🧠 นำเข้าสมองพี่อ้วน
+	"github.com/google/generative-ai-go/genai"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
-	"google.golang.org/api/option"          // 🧠 นำเข้าออปชันพี่อ้วน
+	"google.golang.org/api/option"
 )
 
-// --- 💎 5S Architecture & Models (ThitNueaHub Edition) ---
+// Mission โครงสร้างภารกิจหลัก
 type Mission struct {
 	Platform   string
 	ReplyToken string
@@ -34,119 +35,117 @@ type Mission struct {
 type ThitNueaHub struct {
 	bot       *linebot.Client
 	db        *firestore.Client
-	aiClient  *genai.Client // 🧠 เพิ่มช่องใส่สมอง
+	aiClient  *genai.Client // เพิ่มสมอง AI (Gripen Brain)
 	missionCh chan Mission
 	secret    string
 	wg        sync.WaitGroup
 }
 
-// โครงสร้างกล่องพัสดุสำหรับส่งเข้า Discord (ท่อตรงไม่ใส่ถุง)
 type DiscordPayload struct {
 	Content  string `json:"content"`
 	Username string `json:"username,omitempty"`
 	Avatar   string `json:"avatar_url,omitempty"`
 }
 
-// --- 🚀 ฟังก์ชันยิงจรวดเข้าท่อ Discord ---
 func sendToDiscord(message string, agentName string) {
 	webhookURL := os.Getenv("DISCORD_WEBHOOK_URL")
 	if webhookURL == "" {
-		log.Println("⚠️ สถาปนิกเตือน: ท่อ DISCORD_WEBHOOK_URL ยังไม่ได้เชื่อมต่อ!")
-		return
+		return // เงียบไว้ถ้ายังไม่เสียบท่อ Discord
 	}
 
 	payload := DiscordPayload{
 		Content:  message,
 		Username: agentName,
-		Avatar:   "https://cdn-icons-png.flaticon.com/512/4712/4712109.png", // รูปโปรไฟล์เท่ๆ
+		Avatar:   "https://cdn-icons-png.flaticon.com/512/4712/4712109.png", 
 	}
 
 	jsonData, _ := json.Marshal(payload)
-	req, _ := http.NewRequest("POST", webhookURL, bytes.NewBuffer(jsonData))
-	req.Header.Set("Content-Type", "application/json")
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		log.Printf("❌ ยิง Discord พลาด: %v\n", err)
-		return
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusNoContent && resp.StatusCode != http.StatusOK {
-		log.Printf("⚠️ Discord ตอบกลับผิดปกติ: %s\n", resp.Status)
-	}
+	http.Post(webhookURL, "application/json", bytes.NewBuffer(jsonData))
 }
 
 func main() {
-	log.Println("🐅 [ทิศเหนือ ฮับ]: IGNITE - Trinity Core + Gripen Brain Online...")
+	log.Println("🐅 [ทิศเหนือ ฮับ]: IGNITE V7 - Gripen Brain Upgrade...")
 
 	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
-	}
+	if port == "" { port = "8080" }
 	ctx := context.Background()
 
-	// 1. เชื่อมต่อ Firestore (สะสาง 5ส)
 	projectID := os.Getenv("GOOGLE_CLOUD_PROJECT")
 	dbClient, err := firestore.NewClient(ctx, projectID)
 	if err != nil {
-		log.Printf("⚠️ Firestore Warning: (ยังไม่สมยอมกับพี่อ้วน) %v", err)
+		log.Printf("⚠️ Firestore Ready Check: %v", err)
 	}
 
-	// 🧠 1.5 เสียบปลั๊ก Gemini AI (Gripen Brain)
+	// เสียบปลั๊ก Gemini AI
 	apiKey := os.Getenv("GEMINI_API_KEY")
-	var genaiClient *genai.Client
-	if apiKey != "" {
-		genaiClient, err = genai.NewClient(ctx, option.WithAPIKey(apiKey))
-		if err != nil {
-			log.Printf("⚠️ ภัยพิบัติ! เสียบสมอง AI ไม่สำเร็จ: %v", err)
-		} else {
-			log.Println("🧠 Gripen Brain (Gemini AI) Connected!")
-		}
-	} else {
-		log.Println("⚠️ แจ้งเตือน: ยังไม่มี GEMINI_API_KEY ไอ้จ๊อดจะตอบแบบเดิมไปก่อนนะงับ")
+	genaiClient, err := genai.NewClient(ctx, option.WithAPIKey(apiKey))
+	if err != nil {
+		log.Fatal("⚠️ ภัยพิบัติ! เสียบสมอง AI ไม่สำเร็จ:", err)
 	}
 
 	hub := &ThitNueaHub{
 		db:        dbClient,
-		aiClient:  genaiClient, // ใส่สมองเข้าฮับ
+		aiClient:  genaiClient,
 		missionCh: make(chan Mission, 1000),
 		secret:    os.Getenv("LINE_CHANNEL_SECRET"),
 	}
 
-	// 2. เชื่อมต่อ LINE
 	lineToken := os.Getenv("LINE_CHANNEL_ACCESS_TOKEN")
 	hub.bot, _ = linebot.New(hub.secret, lineToken)
 
-	// แจ้งเตือนเข้าห้องบัญชาการว่าระบบพร้อมรบ!
-	sendToDiscord("🚀 **[SYSTEM IGNITE]** ThitNueaHub F-16 พร้อมทะยานเข้าสู่ Matrix แล้วเจ้านาย!", "🐅 ทิศเหนือ ฮับ (System)")
-
-	// 3. ปล่อยไอ้จอร์จ 10 คนลุยงาน
+	// ไอ้จ๊อดสแตนบาย 10 แรงม้า (Gripen Brain)
 	for i := 1; i <= 10; i++ {
 		hub.wg.Add(1)
 		go hub.GeorgeWorker(ctx, i)
 	}
 
-	// 4. [ Cockpit ] : เสิร์ฟหน้า UI/UX
-	fs := http.FileServer(http.Dir("./web"))
-	http.Handle("/", fs)
-
-	// 5. [ Phrai Thong Shield ]
+	// ท่อรับสัญญาณ (อย่าลืมใน LINE ต้องกรอก /webhook/line นะครับ!)
 	http.HandleFunc("/webhook/line", hub.PhraiThongLine)
-	http.HandleFunc("/webhook/facebook", hub.PhraiThongMeta)
-	http.HandleFunc("/webhook/telegram", hub.PhraiThongTelegram)
-	http.HandleFunc("/api/surgery", hub.NamIngSurgeryHandler)
-
+	
 	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, "✅ ThitNueaHub F-16: Stable & Ignite")
+		fmt.Fprint(w, "✅ ThitNueaHub F-16: Stable & Ignite V7")
 	})
 
-	log.Printf("👑 THITNUEA HUB | 🚀 GLOBAL IGNITE | Port: %s\n", port)
+	log.Printf("👑 THITNUEA HUB | 🚀 V7 IGNITE | Port: %s\n", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
-// --- 🛡️ Phrai Thong Shield (Security & Handlers) ---
+func (h *ThitNueaHub) GeorgeWorker(ctx context.Background, id int) {
+	defer h.wg.Done()
+	model := h.aiClient.GenerativeModel("gemini-pro") // ใช้ Gemini Pro
+
+	// ตั้ง Prompt บอกAIให้มีหัวใจ (System Prompt)
+	model.SystemInstruction = &genai.Content{
+		Parts: []genai.Part{genai.Text("แกคือไอ้จ๊อด V7 ผู้ช่วย SME ไทยผู้มีจิตวิญญาณ ตอบคำถามด้วยความนอบน้อม เป็นกันเอง และคอยให้กำลังใจคนสู้ชีวิตเสมอ ห้ามใช้ศัพท์แสงวิชาการเกินไป")},
+	}
+
+	for m := range h.missionCh {
+		discordReport := fmt.Sprintf("📡 **[LINE]** จาก `%s`: %s", m.UserID, m.Text)
+		sendToDiscord(discordReport, "🕵️ แก้วตา")
+
+		if h.db != nil {
+			h.db.Collection("missions").Add(ctx, map[string]interface{}{
+				"user_id":   m.UserID,
+				"text":      m.Text,
+				"timestamp": m.Timestamp,
+			})
+		}
+
+3.  // --- 🧠 ถึงเวลาปลุก "Gripen Brain" 🧠 ---
+		resp, err := model.GenerateContent(ctx, genai.Text(m.Text))
+		
+		var reply string
+		if err != nil {
+			log.Printf("⚠️ ภัยพิบัติ! AI งง:", err)
+			reply = "💎 แก้วตา: ขออภัยค่ะ! สงสัยพี่อ้วนปิดปรับปรุงสมองไอ AI แป๊บ"
+		} else {
+			// ดึงคำตอบของ AI มา
+			reply = fmt.Sprintf("%v", resp.Candidates[0].Content.Parts[0])
+		}
+
+		h.bot.ReplyMessage(m.ReplyToken, linebot.NewTextMessage(reply)).Do()
+	}
+}
 
 func (h *ThitNueaHub) PhraiThongLine(w http.ResponseWriter, r *http.Request) {
 	body, _ := io.ReadAll(r.Body)
@@ -154,8 +153,7 @@ func (h *ThitNueaHub) PhraiThongLine(w http.ResponseWriter, r *http.Request) {
 	hash.Write(body)
 	sig := r.Header.Get("X-Line-Signature")
 	if base64.StdEncoding.EncodeToString(hash.Sum(nil)) != sig {
-		log.Println("🚫 [พรายทอง]: ตรวจพบการบุกรุก! Signature ไม่ตรง")
-		http.Error(w, "Unauthorized", 401)
+		w.WriteHeader(401)
 		return
 	}
 
@@ -166,81 +164,14 @@ func (h *ThitNueaHub) PhraiThongLine(w http.ResponseWriter, r *http.Request) {
 		if event.Type == linebot.EventTypeMessage {
 			if msg, ok := event.Message.(*linebot.TextMessage); ok {
 				h.missionCh <- Mission{
-					Platform:   "LINE",
+					Platform: "LINE",
 					ReplyToken: event.ReplyToken,
-					Text:       msg.Text,
-					UserID:     event.Source.UserID,
-					Timestamp:  time.Now(),
+					Text: msg.Text,
+					UserID: event.Source.UserID,
+					Timestamp: time.Now(),
 				}
 			}
 		}
 	}
 	w.WriteHeader(200)
-}
-
-func (h *ThitNueaHub) NamIngSurgeryHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("🎨 [น้ำอิง]: รับคำสั่งจากหน้าแอปทิศเหนือ ฮับ...")
-	sendToDiscord("🎨 **[น้ำอิง]** ได้รับคำสั่งผ่าตัด (Surgery) จากหน้าแอปแล้วค่ะเจ้านาย!", "🧑‍🎨 น้ำอิง")
-	w.WriteHeader(200)
-	fmt.Fprint(w, "น้ำอิง: ทิศเหนือ ฮับ จัดการให้เรียบร้อยแล้วค่ะ!")
-}
-
-func (h *ThitNueaHub) PhraiThongMeta(w http.ResponseWriter, r *http.Request) {
-	log.Println("🤫 [Meta]: รับสัญญาณผ่านท่อทิศเหนือ ฮับ")
-	w.WriteHeader(200)
-}
-
-func (h *ThitNueaHub) PhraiThongTelegram(w http.ResponseWriter, r *http.Request) {
-	log.Println("🤖 [Optimus]: สัญญาณ Telegram เข้าสู่ทิศเหนือ ฮับ")
-	w.WriteHeader(200)
-}
-
-// --- 🏍️ George Worker (Processing Unit) ---
-func (h *ThitNueaHub) GeorgeWorker(ctx context.Context, id int) {
-	defer h.wg.Done()
-	
-	// 🧠 เตรียมความพร้อมสมอง AI
-	var model *genai.GenerativeModel
-	if h.aiClient != nil {
-		model = h.aiClient.GenerativeModel("gemini-1.5-flash") // ใช้ Flash ประหยัดและเร็ว
-		model.SystemInstruction = &genai.Content{
-			Parts: []genai.Part{genai.Text("แกคือ 'ไอ้จ๊อด V7' ผู้ช่วยอัจฉริยะของ ThitNueaHub คอยดูแล SME ไทย แกต้องตอบคำถามด้วยความนอบน้อม เป็นกันเอง กวนนิดๆ และคอยให้กำลังใจคนสู้ชีวิตเสมอ เรียกตัวเองว่า ไอ้จ๊อด ลงท้ายด้วยครับ")},
-		}
-	}
-
-	for m := range h.missionCh {
-		log.Printf("🛠️ [ไอ้จ๊อด-%d] สกัดความรู้ให้ทิศเหนือ ฮับ: %s", id, m.Text)
-		
-		discordReport := fmt.Sprintf("📡 **[สัญญาณจาก %s]**\n👤 ผู้ใช้: `%s`\n💬 ข้อความ: *%s*", m.Platform, m.UserID, m.Text)
-		sendToDiscord(discordReport, "🕵️ แก้วตา (ศูนย์บัญชาการ)")
-
-		if h.db != nil {
-			_, _, _ = h.db.Collection("missions").Add(ctx, map[string]interface{}{
-				"user_id":   m.UserID,
-				"text":      m.Text,
-				"platform":  m.Platform,
-				"timestamp": m.Timestamp,
-			})
-		}
-
-		reply := "💎 แก้วตา: ทิศเหนือ ฮับ รับทราบค่ะ! กำลังส่งให้น้ำอิงจัดการนะคะ"
-		
-		// 🧠 ถ้ามีสมอง AI ให้ AI คิดคำตอบแทน!
-		if model != nil {
-			resp, err := model.GenerateContent(ctx, genai.Text(m.Text))
-			if err != nil {
-				log.Printf("⚠️ ภัยพิบัติ! AI งง: %v", err)
-				reply = "ไอ้จ๊อด: ขออภัยครับลูกพี่! สมองไอ้จ๊อดรวนนิดหน่อย (API Error) เดี๋ยวมาตอบใหม่ครับ!"
-			} else {
-				reply = fmt.Sprintf("%v", resp.Candidates[0].Content.Parts[0])
-			}
-		}
-
-		// ดัก Keyword พิเศษ (อันนี้เจ้านายทำไว้ดีมาก พรายทองเก็บไว้ให้ครับ)
-		if strings.Contains(strings.ToLower(m.Text), "money") {
-			reply = "💰 [Money Mode]: สนใจสนับสนุนทิศเหนือ ฮับ ติดต่อ PayPal.me/arthitsiangwan ครับ!"
-		}
-		
-		h.bot.ReplyMessage(m.ReplyToken, linebot.NewTextMessage(reply)).Do()
-	}
 }
