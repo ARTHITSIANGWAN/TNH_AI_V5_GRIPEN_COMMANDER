@@ -9,7 +9,7 @@
     { "binding": "DB", "database_id": "6926955e-a61f-4903-b09e-76e93e62df94" }
   ],
   "r2_buckets": [
-    { "binding": "THN_R2", "bucket_name": "thitnueahub-assets" }
+    { "binding": "TNH_R2", "bucket_name": "thitnueahub-assets" }
   ],
   "triggers": {
     "crons": ["0 0 */3 * *"] // สำหรับ V1 ที่ส่งของทุก 3 วัน (Scheduler)
