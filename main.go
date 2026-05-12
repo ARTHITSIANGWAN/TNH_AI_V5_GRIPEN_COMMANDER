@@ -1,43 +1,38 @@
 package main
 
 import (
-	"encoding/base64"
+	"bytes"
 	"fmt"
-	"os"
+	"io"
+	"strings"
 )
 
-// --- 🛡️ Phase 3: Logic Helmet (Shifter Decoder) ---
+// --- 🛡️ 11 ขุนพล: ระบบรับคำสั่งข้ามมิติ ---
 
-// DecodeSatcha ทำหน้าที่ถอดรหัส "คำหลอก" จากท้าย README
-func DecodeSatcha(obfuscatedData string) (string, error) {
-	// 1. ดึงค่าตัวเลื่อนตำแหน่งจาก Environment (Secret)
-	shifter := os.Getenv("TNH_SHIFTER")
-	if shifter == "" {
-		return "", fmt.Errorf("⚠️ ไม่พบกุญแจ TNH_SHIFTER")
+// ReadCommandFromImage ทำหน้าที่สกัดคำสั่งที่ซ่อนอยู่ท้ายรูปภาพ
+func ReadCommandFromImage(imgData []byte) string {
+	// ค้นหาตำแหน่งของ "CMD:" ที่บอสฝังไว้ท้ายไฟล์
+	marker := []byte("CMD:")
+	idx := bytes.Index(imgData, marker)
+	if idx == -1 {
+		return "❌ ไม่พบสัจจะในรูปภาพ"
 	}
 
-	// 2. ถอดรหัสขั้นแรกจาก Base64
-	decodedBytes, err := base64.StdEncoding.DecodeString(obfuscatedData)
-	if err != nil {
-		return "", err
-	}
+	// สกัดคำสั่งออกมา (Zero-Garbage Logic)
+	command := string(imgData[idx+4:])
+	return strings.TrimSpace(command)
+}
 
-	// 3. ทำการเลื่อนตำแหน่งข้อมูลกลับ (Simple Shift Logic)
-	// เพื่อให้ได้ JSON Metadata ที่แท้จริง
-	result := string(decodedBytes) 
-	log.Printf("🔓 พลายทองถอดรหัสสำเร็จ: %s", result)
-	
-	return result, nil
+// FetchCommandFromIssue (ตัวอย่าง) สำหรับดึงสัจจะจาก GitHub Issue
+func FetchCommandFromIssue(issueBody string) {
+	// ดึง manifesto_id และตรวจสอบสิทธิด้วย HMAC
+	fmt.Printf("🕵️ พลายทอง ตรวจพบภารกิจจาก Issue: %s\n", issueBody)
 }
 
 func main() {
-	// ตัวอย่าง: รับข้อมูลจากส่วนท้ายของ README ที่บอสฝังไว้
-	fakeData := "V0hJVEUtVElHRVItT05FLUlHTklURQ==" // คำหลอกที่ดูเหมือนขยะ
+	// ตัวอย่าง: จำลองข้อมูลรูปภาพที่มีคำสั่งซ่อนอยู่
+	mockImage := append([]byte{0xFF, 0xD8, 0xFF}, []byte("\nCMD:IGNITE_V83_EMPIRE")...)
 	
-	satcha, err := DecodeSatcha(fakeData)
-	if err != nil {
-		fmt.Println("❌ ข้อมูลไม่ถูกต้อง กากบาทจะปรากฏ")
-	} else {
-		fmt.Printf("✅ ยินดีด้วยจอมทัพ! สัจจะคือ: %s\n", satcha)
-	}
+	cmd := ReadCommandFromImage(mockImage)
+	fmt.Printf("🚀 สัญญาณที่ได้รับ: %s\n", cmd)
 }
