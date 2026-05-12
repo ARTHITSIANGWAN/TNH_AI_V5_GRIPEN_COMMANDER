@@ -1,30 +1,44 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
-	"strings"
+	"os"
 )
 
-// ReadSatchaFromImage: สกัดคำสั่งที่ซ่อนอยู่ท้ายไฟล์รูปภาพ (Zero-Garbage)
-func ReadSatchaFromImage(imgData []byte) string {
-	// 1. ค้นหา Marker 'CMD:' ที่ฝังไว้ท้ายไฟล์
-	marker := []byte("CMD:")
-	idx := bytes.Index(imgData, marker)
-	
-	if idx == -1 {
-		return "❌ No Command Found"
-	}
+// TNH_Orchestrator: โครงสร้างสถานะขุนพลตามภาพ 14268.jpg
+type GeneralStatus struct {
+	Level    string
+	Name     string
+	Progress int // เปอร์เซ็นต์ความคืบหน้า (Segmented bar)
+}
 
-	// 2. สกัดข้อมูลหลัง Marker ออกมา (Payload JSON)
-	rawCmd := string(imgData[idx+len(marker):])
-	return strings.TrimSpace(rawCmd)
+// CheckGeneralProgress: ฟังก์ชันตรวจสอบสัจจะความคืบหน้า
+func CheckGeneralProgress(level string, currentPercent int) {
+	fmt.Printf("🛡️ [V5 Gripen] กำลังตรวจสอบขุนพล %s: ความคืบหน้า %d%%\n", level, currentPercent)
+	
+	// หากความคืบหน้ายังไม่ถึง 100% ให้ขุนพลหนุน (V8.1 - V8.3) เข้าช่วย
+	if currentPercent < 100 {
+		igniteTrinityRelay(level)
+	}
+}
+
+func igniteTrinityRelay(level string) {
+	// ใช้กุญแจ GITHUB_TOKEN ที่บอสฝังไว้ใน Cloudflare
+	token := os.Getenv("GITHUB_TOKEN")
+	if token == "" {
+		fmt.Println("❌ กากบาทปรากฏ: ไม่พบกุญแจสัจจะ (GITHUB_TOKEN)")
+		return
+	}
+	fmt.Printf("🚀 สั่งการ V83 Trinity: สนับสนุนขุนพล %s ทันที!\n", level)
 }
 
 func main() {
-	// จำลองข้อมูลภาพที่ส่งมาจากปฏิทินหรือ R2
-	mockImage := append([]byte{0x89, 0x50, 0x4E, 0x47}, []byte("\nCMD:{\"job\":\"IGNITE_V83\",\"id\":\"9333074\"}")...)
-	
-	satcha := ReadSatchaFromImage(mockImage)
-	fmt.Printf("🎯 สัจจะที่ขุนพลพลายทองพบ: %s\n", satcha)
+	// จำลองข้อมูลจากภาพ 14268.jpg ที่บอสเซ็ตไว้
+	status := GeneralStatus{
+		Level:    "L4 Analyst",
+		Name:     "พลายทอง",
+		Progress: 40, // ตามภาพ Segmented bar 40%
+	}
+
+	CheckGeneralProgress(status.Level, status.Progress)
 }
