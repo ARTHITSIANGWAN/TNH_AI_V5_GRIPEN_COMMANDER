@@ -1,18 +1,27 @@
 {
-  "name": "tnh-ai-v5-gripen", // เปลี่ยนชื่อตามรุ่น V1, V2, V5
+  "name": "tnh-ai-v5-gripen-commander", // ปรับให้ตรงกับโปรเจกต์หลัก
   "main": "src/index.ts",
-  "compatibility_date": "2026-05-05",
+  "compatibility_date": "2026-05-06",
+  "compatibility_flags": [ "nodejs_compat" ], // เพิ่มความสามารถในการประมวลผล Layer
   "kv_namespaces": [
-    { "binding": "TNH_KV", "id": "2fa0a4773efa4a18b1534274d238dd76" }
+    { 
+      "binding": "TNH_KV", 
+      "id": "2fa0a4773efa4a18b1534274d238dd76" 
+    }
   ],
   "d1_databases": [
-    { "binding": "DB", "database_id": "6926955e-a61f-4903-b09e-76e93e62df94" }
+    { 
+      "binding": "DB", 
+      "database_id": "6a8b4373-bf40-4b63-bb02-f612ecbe63b7" // แก้ไข ID ให้ตรงกับฐานข้อมูลจริง
+    }
   ],
   "r2_buckets": [
-    { "binding": "TNH_R2", "bucket_name": "thitnueahub-assets" }
+    { 
+      "binding": "TNH_R2", 
+      "bucket_name": "thitnueahub-assets" 
+    }
   ],
   "triggers": {
-    "crons": ["0 0 */3 * *"] // สำหรับ V1 ที่ส่งของทุก 3 วัน (Scheduler)
+    "crons": ["0 0 */3 * *"] // ทำงานอัตโนมัติทุก 3 วันตามสถาปัตยกรรม V1
   }
 }
-
