@@ -1,8 +1,3 @@
-module github.com/ARTHITSIANGWAN/thitnueahub-agent-to-agent-gripen
+module github.com/ARTHITSIANGWAN/TNH-AI-V5-GRIPEN-COMMANDER
 
-go 1.21
-
-require (
-    // หัวใจหลักในการเชื่อมต่อกับ Gemini API
-    google.golang.org/genai v0.1.0 
-)
+go 1.22
