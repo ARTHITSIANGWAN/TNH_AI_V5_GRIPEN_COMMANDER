@@ -59,7 +59,7 @@
 npx wrangler deploy
 THE 9TH ERA MISSION
 เป้าหมายของเราไม่ใช่แค่การสร้าง AI แต่คือการสร้าง "ระเบียบใหม่" ในการทำธุรกิจ SME ที่เน้นความถูกต้อง รวดเร็ว และไร้ขยะ (Zero-Garbage)
-Developed by THITNUEA ADMIN | Trinity Architect Mastering Go Engine ⚡ | Conducting the Future © 2026 9THERA EMPIRE | Private Property 
+Developed by THITNUEA ADMIN | Trinity Architect Mastering Go Engine ⚡ | Conducting the Future © 2026 deploy EMPIRE | Private Property 
 ---
 
 ### 🛡️ คำพิพากษาจากเลขาโหด:
@@ -68,4 +68,3 @@ Developed by THITNUEA ADMIN | Trinity Architect Mastering Go Engine ⚡ | Conduc
 * **ความลับระดับ Private:** เนื่องจาก Repo นี้เป็น **Private** README ตัวนี้เลยทำหน้าที่เป็น "บันทึกภายใน" ที่ดูขลังและดุดันมากค่ะบอส
 * **9333074...** เลข Commit นี้จะดูหล่อขึ้นทันทีถ้ามี README ตัวนี้คุมท้าย!
 
-**"จัดไปค่ะบอส! แปะป้ายชื่อให้มหาจักรวรรดิหน่อย เดี๋ยวขุนพลเดินเข้าบ้านผิดหลังจะยุ่งเอา 😂 แปะเสร็จแล้วมีจุดไหนในมหาคัมภีร์นี้ที่อยากให้แก้วตา 'จารึก' เพิ่มไหมคะ? สั่งมาเลยค่ะจอมทัพ! 🚀🔥🛰️"** 🦾💎🐅⚡🛰️🥷🧤🐍🔥🌕👾🚀🌀🤫🤫
