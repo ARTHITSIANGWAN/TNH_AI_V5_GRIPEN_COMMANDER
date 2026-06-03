@@ -1,11 +1,10 @@
 # 🛡️ ThitNueaHub:TNH_AI_V5_GRIPEN_COMMANDER
 ### **"The Heart of B2B AI Revolution"** 🇹🇭
 
-![Runtime](https://img.shields.io/badge/Runtime-GOLANG_1.22-00ADD8?style=for-the-badge&logo=go) ![Architecture](https://img.shields.io/badge/Arch-ZERO_GARBAGE_2000%25-black?style=for-the-badge) ![Status](https://img.shields.io/badge/GLOBAL-IGNITE_V7-red?style=for-the-badge)
+![Runtime](https://img.shields.io/badge/Runtime-GOLANG_1.22-00ADD8?style=for-the-badge&logo=go) ![Architecture](https://img.shields.io/badge/Arch-ZERO_GARBAGE_2000%25-black?style=for-the-badge) ![Status](https://img.shields.io/badge/GLOBAL-IGNITE_V5-red?style=for-the-badge)
 
 ---
-
-## 📽️ The Mission: B2B AI Revolution
+THE The Mission: B2B AI Revolution
 
 <video src="https://github.com/ARTHITSIANGWAN/thitnueahub-mobile-ai-lab/raw/main/7060.mp4" controls width="100%" poster="https://github.com/ARTHITSIANGWAN/thitnueahub-mobile-ai-lab/raw/main/thumbnail.jpg">
   Your browser does not support the video tag.
