@@ -1,38 +1,46 @@
-name: 🚀 TNH_AI_SOOD_SOI_UNIFIER
+name: TNH_AI_SOOD_SOI_UNIFIER
+
 on:
-  workflow_dispatch: # ปุ่มกด Ignite ด้วยมือจอมทัพ
+  workflow_dispatch:
 
 jobs:
   push_to_empire:
+    name: Sync Source Code to Core Repository
     runs-on: ubuntu-latest
+
     steps:
-      - name: 🛡️ Step 1: Checkout Source (5S Audit)
+      - name: Checkout Source Repository
         uses: actions/checkout@v4
 
-      - name: 📦 Step 2: Pack Everything (TS/TOML/JSON)
+      - name: Build Deployment Bundle Artifacts
         run: |
-          mkdir -p bundle
-          # กวาดเรียบ: โค้ด, ตั้งค่า, และสมอง AI
-          rsync -av --exclude='.git' --exclude='.github' --exclude='node_modules' ./ bundle/
+          mkdir -p deployment_bundle
+          rsync -av \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='node_modules' \
+            ./ deployment_bundle/
 
-      - name: 🚚 Step 3: Ignite to Project 13
+      - name: Execute Remote Synchronization and Deployment
         env:
-          GH_TOKEN: ${{ secrets.GH_PAT_TOKEN }}
+          GITHUB_PAT_TOKEN: ${{ secrets.GH_PAT_TOKEN }}
         run: |
           git config --global user.name "TNH-AI-JOD-L5"
           git config --global user.email "jod@tnh.ai"
           
-          # ดึงมหาจักรวรรดิปลายทางมา (โปรเจกต์ 13)
-          git clone https://x-access-token:${GH_TOKEN}@github.com/ARTHITSIANGWAN/TNH-AI-9th-Era-of-Fire-AI-Orchestra-Mastering-Go-Engine- destination
+          # Clone target orchestrator repository
+          git clone "https://x-access-token:${GITHUB_PAT_TOKEN}@github.com/ARTHITSIANGWAN/TNH-AI-9th-Era-of-Fire-AI-Orchestra-Mastering-Go-Engine-" destination_repository
           
-          # แยกสัดส่วนตามแหล่งที่มา (เช่น v83, project12)
-          # บอสเปลี่ยนชื่อโฟลเดอร์ปลายทางได้ตรง "from_source" นะก้า
-          TARGET_DIR="destination/from_$(basename $GITHUB_REPOSITORY)"
-          mkdir -p $TARGET_DIR
-          cp -rv bundle/* $TARGET_DIR/
+          # Establish deterministic source folder mapping
+          SOURCE_REPOSITORY_NAME=$(basename "$GITHUB_REPOSITORY")
+          TARGET_DEPLOYMENT_DIRECTORY="destination_repository/from_${SOURCE_REPOSITORY_NAME}"
           
-          cd destination
+          mkdir -p "$TARGET_DEPLOYMENT_DIRECTORY"
+          cp -rv deployment_bundle/* "$TARGET_DEPLOYMENT_DIRECTORY/"
+          
+          # Commit and push updates to remote infrastructure
+          cd destination_repository
           git add .
-          git commit -m "L5: [สุดซอย] ย้ายกองกำลังจาก $GITHUB_REPOSITORY มาสมทบแล้วก้า! 🤫" || echo "No changes"
+          git commit -m "Level 5 Automated Sync: Integrated payload from ${SOURCE_REPOSITORY_NAME} into orchestration pipeline." || echo "Deployment Status: No structural changes detected."
           git push
           
