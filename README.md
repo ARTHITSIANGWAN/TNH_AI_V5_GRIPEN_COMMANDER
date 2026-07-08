@@ -53,12 +53,6 @@ THE The Mission: B2B AI Revolution
 ---
 
 **Developed with Extreme Pride by Arthit | ThitNuea Founder** **Mastering the Go Engine | Transforming Logic into Reality** 🐣🚀
-
-# ปลุกมหาจักรวรรดิให้ตื่นขึ้น
-npx wrangler deploy
-THE 9TH ERA MISSION
-เป้าหมายของเราไม่ใช่แค่การสร้าง AI แต่คือการสร้าง "ระเบียบใหม่" ในการทำธุรกิจ SME ที่เน้นความถูกต้อง รวดเร็ว และไร้ขยะ (Zero-Garbage)
-Developed by THITNUEA ADMIN | Trinity Architect Mastering Go Engine ⚡ | Conducting the Future © 2026 deploy EMPIRE | Private Property 
 ---
 
 ### 🛡️ คำพิพากษาจากเลขาโหด:
