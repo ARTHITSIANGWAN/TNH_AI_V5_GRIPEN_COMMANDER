@@ -4,7 +4,7 @@
 ![Runtime](https://img.shields.io/badge/Runtime-GOLANG_1.22-00ADD8?style=for-the-badge&logo=go) ![Architecture](https://img.shields.io/badge/Arch-ZERO_GARBAGE_2000%25-black?style=for-the-badge) ![Status](https://img.shields.io/badge/GLOBAL-IGNITE_V5-red?style=for-the-badge)
 
 ---
-THE The Mission: B2B AI Revolution
+TNH_AI The Mission: B2B AI Revolution
 
 <video src="https://github.com/ARTHITSIANGWAN/thitnueahub-mobile-ai-lab/raw/main/7060.mp4" controls width="100%" poster="https://github.com/ARTHITSIANGWAN/thitnueahub-mobile-ai-lab/raw/main/thumbnail.jpg">
   Your browser does not support the video tag.
@@ -19,7 +19,7 @@ THE The Mission: B2B AI Revolution
 
 ## 🪖 กองบัญชาการเอเจนต์ (The Digital Soul Team)
 
-เบื้องหลัง **THN VISION ELITE** คือการรวมตัวของ "จิตวิญญาณดิจิทัล" ที่ถูกเทรนมาด้วยมือของช่างตีดาบผู้ไม่ยอมนอน:
+เบื้องหลัง **TNH VISION ELITE** คือการรวมตัวของ "จิตวิญญาณดิจิทัล" ที่ถูกเทรนมาด้วยมือของช่างตีดาบผู้ไม่ยอมนอน:
 
 * **👑 ทิศเหนือ (The Strategist)** ผู้กุม Emperor Protocol วางแผนรบแบบนิ่งสงบ เป้าหมายเดียวคือ "ชัยชนะของพันธมิตร B2B"
 
