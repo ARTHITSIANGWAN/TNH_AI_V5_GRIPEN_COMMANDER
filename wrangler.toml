@@ -4,26 +4,17 @@ main = "src/index.ts"
 compatibility_date = "2026-05-06"
 compatibility_flags = [ "nodejs_compat" ]
 
-# 1. เชื่อมต่อ D1 Database (หัวใจของสัจจะ - ต้องใช้ ID เดียวกับ V83)
 [[d1_databases]]
 binding = "DB" 
 database_name = "thitnueahub-core-db"
 database_id = "6a8b4373-bf40-4b63-bb02-f612ecbe63b7"
 
-# 2. เชื่อมต่อ R2 Bucket (สำหรับสกัดเลเยอร์คำสั่งจากรูปภาพ)
 [[r2_buckets]]
 binding = "TNH_R2"
 bucket_name = "thitnueahub-assets"
 
-# 3. เชื่อมต่อ KV Namespace (สำหรับ Load Balancing และ Calendar Sync)
 [[kv_namespaces]]
 binding = "TNH_KV"
 id = "2fa0a4773efa4a18b1534274d238dd76"
 
-# 4. เปิดใช้งาน AI สำหรับการประมวลผล Gripen Brain
-[ai]
-binding = "AI"
-
-# 5. การตั้งค่า Trigger (สำหรับตรวจสอบปฏิทินทุก 3 นาที เพื่อความไวระดับ F-16)
-[triggers]
-crons = ["*/3 * * * *"]
+# ลบ [ai] binding ออก เพื่อถอดสายสะดือ Cloudflare AI
